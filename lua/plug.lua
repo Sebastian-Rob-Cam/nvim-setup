@@ -37,9 +37,26 @@ return {
     },
 
     -- Icon set
-   "nvim-tree/nvim-web-devicons",
+   --"nvim-tree/nvim-web-devicons",
    "adelarsq/vim-devicons-emoji",
 
    -- Float terminal
    "voldikss/vim-floaterm",
+
+   -- Wrapping text
+   {
+        "andrewferrier/wrapping.nvim",
+        config = function()
+            require("wrapping").setup()
+        end
+    },
+
+    -- Prettier
+    "prettier/vim-prettier",
+
+    -- Bar
+    {
+	    'nvim-lualine/lualine.nvim',
+	    dependencies = { 'nvim-tree/nvim-web-devicons' }
+    } 
 }

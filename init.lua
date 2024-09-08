@@ -18,7 +18,7 @@ vim.keymap.set(
   "n", 
   "<leader>a", 
   function()
-    vim.cmd.RustLsp('codeAction') -- supports rust-analyzer's grouping
+    vim.cmd.RustLsp('codeAction') -- supports rust-analyzer's grouping hello    
     -- or vim.lsp.buf.codeAction() if you don't want grouping.
   end,
   { silent = true, buffer = bufnr }
@@ -140,11 +140,6 @@ require('nvim-treesitter.configs').setup {
   }
 }
 
--- nvim-tree Setup 
--- disable netrw at the very start of your init.lua
---vim.g.loaded_netrw = 1
---vim.g.loaded_netrwPlugin = 1
-
 -- optionally enable 24-bit colour
 vim.opt.termguicolors = true
 
@@ -155,7 +150,7 @@ vim.api.nvim_set_keymap('i', '<C-s>', '<Esc>:w<CR>a', { noremap = true, silent =
 -- colorscheme
 
 vim.o.termguicolors = true
-vim.o.background = "light"
+vim.o.background = "dark"
 vim.g.zenbones_compat = 1
 vim.cmd("colorscheme zenbones")
 
@@ -173,10 +168,22 @@ require('nvim-tree').setup {
     enable = true,
   },
   view = {
-    width = 25,
+    width = 20,
     side = 'left',
   }
 }
+
+-- Nvim vanilla settings
+-- Enable line numbers
+vim.opt.number = true
+-- Enable soft wrapping at 80 characters
+vim.opt.textwidth = 80
+vim.opt.wrap = true
+
+-- Prettier config
+vim.cmd [[
+  autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
+]]
 
 -- vim-floaterm
 -- Setting some keybindings for vim-floaterm
@@ -184,10 +191,52 @@ vim.api.nvim_set_keymap('n', '<leader>ft', ':FloatermToggle<CR>', { noremap = tr
 vim.api.nvim_set_keymap('n', '<leader>fn', ':FloatermNew<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>fp', ':FloatermPrev<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>fc', ':FloatermKill<CR>', { noremap = true, silent = true })
-
--- Floaterm configuration
+-- Set floaterm to open at the bottom of the screen
+vim.g.floaterm_wintype = 'split'  -- Use split mode instead of a floating window
+vim.g.floaterm_position = 'bottom'  -- Position the terminal at the bottom
+vim.g.floaterm_height = 0.3  -- Set the height of the terminal to 30% of the screen
 vim.g.floaterm_width = 0.9
-vim.g.floaterm_height = 0.9
 vim.g.floaterm_title = 'Terminal ($1/$2)'
 vim.g.floaterm_autoclose = 2
 
+-- Status bar
+require('lualine').setup {
+  options = {
+    icons_enabled = true,
+    theme = 'auto',
+    component_separators = { left = '', right = ''},
+    section_separators = { left = '', right = ''},
+    disabled_filetypes = {
+      statusline = {},
+      winbar = {},
+    },
+    ignore_focus = {},
+    always_divide_middle = true,
+    globalstatus = false,
+    refresh = {
+      statusline = 1000,
+      tabline = 1000,
+      winbar = 1000,
+    }
+  },
+  sections = {
+    lualine_a = {'mode'},
+    lualine_b = {'branch', 'diff', 'diagnostics'},
+    lualine_c = {'filename'},
+    lualine_x = {'encoding', 'fileformat', 'filetype'},
+    lualine_y = {'progress'},
+    lualine_z = {'location'}
+  },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {'filename'},
+    lualine_x = {'location'},
+    lualine_y = {},
+    lualine_z = {}
+  },
+  tabline = {},
+  winbar = {},
+  inactive_winbar = {},
+  extensions = {}
+}
